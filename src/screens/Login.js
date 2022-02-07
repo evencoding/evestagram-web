@@ -1,14 +1,131 @@
+import { gql, useMutation } from "@apollo/client";
+import { useForm } from "react-hook-form";
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
+import { logUserIn } from "../apollo";
+import AuthLayout from "../components/auth/AuthLayout";
+import BottomBox from "../components/auth/BottomBox";
+import Button from "../components/auth/Button";
+import FacebookLogin from "../components/auth/FacebookLogin";
+import FormBox from "../components/auth/FormBox";
+import FormError from "../components/auth/FormError";
+import Input from "../components/auth/Input";
+import Separator from "../components/auth/Separator";
+import PageTitle from "../components/PageTitle";
+import routes from "../routes";
 
-const Title = styled.h1``;
+const Notification = styled.div`
+  color: #2ecc71;
+  margin: 25px 0 -10px 0;
+  font-weight: 600;
+`;
 
-const Container = styled.div``;
+const LOGIN_MUTATION = gql`
+  mutation login($username: String!, $password: String!) {
+    login(username: $username, password: $password) {
+      ok
+      token
+      error
+    }
+  }
+`;
 
 function Login() {
+  const location = useLocation();
+  const {
+    register,
+    handleSubmit,
+    errors,
+    formState,
+    getValues,
+    setError,
+    clearErrors,
+  } = useForm({
+    mode: "onChange",
+    defaultValues: {
+      username: location?.state?.username || "",
+      password: location?.state?.password || "",
+    },
+  });
+  const onCompleted = (data) => {
+    const {
+      login: { ok, error, token },
+    } = data;
+    if (!ok) {
+      return setError("result", {
+        message: error,
+      });
+    }
+    if (token) {
+      logUserIn(token);
+    }
+  };
+  const [login, { loading }] = useMutation(LOGIN_MUTATION, {
+    onCompleted,
+  });
+  const onSubmitValid = (data) => {
+    if (loading) {
+      return;
+    }
+    const { username, password } = getValues();
+    login({
+      variables: { username, password },
+    });
+  };
+  const clearLoginError = () => {
+    clearErrors("result");
+  };
   return (
-    <Container>
-      <Title>Login</Title>
-    </Container>
+    <AuthLayout>
+      <PageTitle title="Login" />
+      <FormBox>
+        <div>
+          <h1>Evestagram</h1>
+        </div>
+        <Notification>{location?.state?.message}</Notification>
+        <form onSubmit={handleSubmit(onSubmitValid)}>
+          <Input
+            ref={register({
+              required: "Username is required.",
+              minLength: {
+                value: 5,
+                message: "Username should be longer than 5 chars.",
+              },
+            })}
+            onChange={clearLoginError}
+            name="username"
+            type="text"
+            placeholder="Username"
+            hasError={Boolean(errors?.username?.message)}
+          />
+          <FormError message={errors?.username?.message} />
+          <Input
+            ref={register({
+              required: "Password is required.",
+            })}
+            onChange={clearLoginError}
+            name="password"
+            type="password"
+            placeholder="Password"
+            hasError={Boolean(errors?.password?.message)}
+          />
+          <FormError message={errors?.password?.message} />
+          <Button
+            type="submit"
+            value={loading ? "Loading..." : "Log in"}
+            disabled={!formState.isValid || loading}
+          />
+          <FormError message={errors?.result?.message} />
+        </form>
+        <Separator />
+        <FacebookLogin />
+      </FormBox>
+      <BottomBox
+        cta="Don't have an account?"
+        link={routes.signUp}
+        linkText="Sign up"
+      />
+    </AuthLayout>
   );
 }
 
