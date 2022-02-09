@@ -28,8 +28,11 @@ export const GlobalStyles = createGlobalStyle`
         font-size:14px;
         font-family:'Open Sans', sans-serif;
         color: ${(props) => props.theme.fontColor};
-    }
+        -ms-overflow-style:none;
+      }
+      body::-webkit-scrollbar { display:none; }
     a {
       text-decoration: none;
+      color:inherit;
     }
 `;

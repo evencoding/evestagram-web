@@ -1,17 +1,41 @@
 import styled from "styled-components";
-import { logUserOut } from "../apollo";
 import { useHistory } from "react-router";
-
-const Title = styled.h1``;
+import { gql, useQuery } from "@apollo/client";
+import Photo from "../components/feed/Photo";
+import PageTitle from "../components/PageTitle";
+import { COMMENT_FRAGMENT, PHOTO_FRAGMENT } from "../fragments";
 
 const Container = styled.div``;
 
+const FEED_QUERY = gql`
+  query seeFeed {
+    seeFeed {
+      ...PhotoFragment
+      user {
+        username
+        avatar
+      }
+      caption
+      comments {
+        ...CommentFragment
+      }
+      createdAt
+      isMine
+    }
+  }
+  ${PHOTO_FRAGMENT}
+  ${COMMENT_FRAGMENT}
+`;
+
 function Home() {
+  const { data } = useQuery(FEED_QUERY);
   const history = useHistory();
   return (
     <Container>
-      <Title>Welcome we did it!</Title>
-      <button onClick={() => logUserOut(history)}>Log out now!</button>
+      <PageTitle title="Home" />
+      {data?.seeFeed?.map((photo) => (
+        <Photo key={photo.id} {...photo} />
+      ))}
     </Container>
   );
 }

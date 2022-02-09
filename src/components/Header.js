@@ -60,20 +60,26 @@ function Header() {
     <SHeader>
       <Wrapper>
         <Column>
-          <h1>Evestagram</h1>
+          <Link to={routes.home}>
+            <h1>Evestagram</h1>
+          </Link>
         </Column>
         <Column>
           {isLoggedIn ? (
             <>
               <IconsContainer>
                 <Icon>
-                  <FontAwesomeIcon icon={faHome} size="lg" />
+                  <Link to={routes.home}>
+                    <FontAwesomeIcon icon={faHome} size="lg" />
+                  </Link>
                 </Icon>
                 <Icon>
                   <FontAwesomeIcon icon={faCompass} size="lg" />
                 </Icon>
                 <Icon>
-                  <Avatar url={data?.me?.avatar} />
+                  <Link to={`/users/${data?.me?.username}`}>
+                    <Avatar url={data?.me?.avatar} />
+                  </Link>
                 </Icon>
               </IconsContainer>
             </>
