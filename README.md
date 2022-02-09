@@ -4,4 +4,4 @@
 - [x] Authentication
 - [x] Arch.
 - [x] Styles
-- [ ] Log In / Sign Up
+- [x] Log In / Sign Up
