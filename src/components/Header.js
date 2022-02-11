@@ -1,5 +1,9 @@
 import { useReactiveVar } from "@apollo/client";
-import { faCompass, faUser } from "@fortawesome/free-regular-svg-icons";
+import {
+  faCompass,
+  faPlusSquare,
+  faUser,
+} from "@fortawesome/free-regular-svg-icons";
 import { faHome } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
@@ -8,6 +12,7 @@ import { isLoggedInVar } from "../apollo";
 import useUser from "../hooks/useUser";
 import routes from "../routes";
 import Avatar from "./Avatar";
+import DarkMode from "./DarkMode";
 
 const SHeader = styled.header`
   width: 100%;
@@ -69,12 +74,18 @@ function Header() {
             <>
               <IconsContainer>
                 <Icon>
+                  <Link to={routes.upload}>
+                    <FontAwesomeIcon icon={faPlusSquare} size="lg" />
+                  </Link>
+                </Icon>
+                <Icon>
                   <Link to={routes.home}>
                     <FontAwesomeIcon icon={faHome} size="lg" />
                   </Link>
                 </Icon>
                 <Icon>
-                  <FontAwesomeIcon icon={faCompass} size="lg" />
+                  {/* <FontAwesomeIcon icon={faCompass} size="lg" /> */}
+                  <DarkMode />
                 </Icon>
                 <Icon>
                   <Link to={`/users/${data?.me?.username}`}>

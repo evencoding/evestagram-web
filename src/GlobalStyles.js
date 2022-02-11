@@ -3,14 +3,16 @@ import reset from "styled-reset";
 
 export const lightTheme = {
   accent: "#0095f6",
-  bgColor: "#FFFFFF",
+  bgColor: "#FAFAFA",
+  boxColor: "rgb(255, 255, 255)",
   fontColor: "rgb(38, 38, 38)",
   borderColor: "rgb(219, 219, 219)",
 };
 
 export const darkTheme = {
   accent: "#0095f6",
-  bgColor: "#010101",
+  bgColor: "rgb(10, 10, 10)",
+  boxColor: "rgb(1, 1, 1)",
   fontColor: "#FFFFFF",
   borderColor: "rgb(219, 219, 219)",
 };

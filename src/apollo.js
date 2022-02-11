@@ -3,7 +3,9 @@ import {
   ApolloClient,
   InMemoryCache,
   createHttpLink,
+  ApolloLink,
 } from "@apollo/client";
+import { createUploadLink } from "apollo-upload-client";
 import { setContext } from "@apollo/client/link/context";
 
 const TOKEN = "token";
@@ -34,11 +36,14 @@ export const disableDarkMode = () => {
   darkModeVar(false);
 };
 
-const httpLink = createHttpLink({
-  uri:
-    process.env.NODE_ENV === "production"
-      ? "https://evenstagram-backend.herokuapp.com/graphql"
-      : "http://localhost:4000/graphql",
+// const httpLink = createHttpLink({
+//   uri:
+//     process.env.NODE_ENV === "production"
+//       ? "https://evenstagram-backend.herokuapp.com/graphql"
+//       : "http://localhost:4000/graphql",
+// });
+const uploadLink = createUploadLink({
+  uri: "http://localhost:4000/graphql",
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -51,7 +56,8 @@ const authLink = setContext((_, { headers }) => {
 });
 
 export const client = new ApolloClient({
-  link: authLink.concat(httpLink),
+  // link: authLink.concat(httpLink),
+  link: ApolloLink.from([authLink, uploadLink]),
   cache: new InMemoryCache({
     typePolicies: {
       User: {

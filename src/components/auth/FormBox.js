@@ -8,6 +8,7 @@ const Container = styled(BaseBox)`
   flex-direction: column;
   padding: 35px 40px 25px 40px;
   margin-bottom: 10px;
+  background-color: ${(props) => props.theme.boxColor};
   h1 {
     font-size: 60px;
     font-weight: 600;

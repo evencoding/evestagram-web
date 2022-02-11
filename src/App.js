@@ -11,6 +11,7 @@ import routes from "./routes";
 import { HelmetProvider } from "react-helmet-async";
 import Layout from "./components/Layout";
 import Profile from "./screens/Profile";
+import Upload from "./components/Upload";
 
 function App() {
   const isLoggedIn = useReactiveVar(isLoggedInVar);
@@ -26,6 +27,15 @@ function App() {
                 {isLoggedIn ? (
                   <Layout>
                     <Home />
+                  </Layout>
+                ) : (
+                  <Login />
+                )}
+              </Route>
+              <Route path={routes.upload} exact>
+                {isLoggedIn ? (
+                  <Layout>
+                    <Upload />
                   </Layout>
                 ) : (
                   <Login />

@@ -83,7 +83,7 @@ function Login() {
           <h1>Evestagram</h1>
         </div>
         <Notification>{location?.state?.message}</Notification>
-        <form onSubmit={handleSubmit(onSubmitValid)}>
+        <form onSubmit={handleSubmit(onSubmitValid)} autocomplete="off">
           <Input
             ref={register({
               required: "Username is required.",

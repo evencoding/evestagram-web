@@ -109,6 +109,7 @@ function SignUp() {
         <form
           onSubmit={handleSubmit(onSubmitValid)}
           style={{ marginTop: "-10px" }}
+          autocomplete="off"
         >
           <Input
             ref={register({
