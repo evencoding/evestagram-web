@@ -129,7 +129,7 @@ function Comments({ photoId, author, caption, commentNumber, comments }) {
         />
       ))}
       <PostCommentContainer>
-        <form onSubmit={handleSubmit(onValid)}>
+        <form onSubmit={handleSubmit(onValid)} autoComplete="off">
           <PostCommentInput
             name="payload"
             ref={register({ required: true })}
