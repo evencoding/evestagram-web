@@ -53,7 +53,7 @@ function Upload() {
       <PageTitle title="Upload" />
       <Wrapper>
         <div>
-          <form onSubmit={handleSubmit(onSubmitValid)} autocomplete="off">
+          <form onSubmit={handleSubmit(onSubmitValid)} autoComplete="off">
             <input
               ref={register}
               name="file"

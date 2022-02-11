@@ -109,7 +109,7 @@ function SignUp() {
         <form
           onSubmit={handleSubmit(onSubmitValid)}
           style={{ marginTop: "-10px" }}
-          autocomplete="off"
+          autoComplete="off"
         >
           <Input
             ref={register({
@@ -142,10 +142,6 @@ function SignUp() {
           <Input
             ref={register({
               required: "Username is required.",
-              minLength: {
-                value: 5,
-                message: "Username should be longer than 5 chars.",
-              },
             })}
             name="username"
             type="text"
