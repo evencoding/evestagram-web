@@ -1,6 +1,8 @@
 import { gql, useMutation } from "@apollo/client";
 import { useForm } from "react-hook-form";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import styled from "styled-components";
+import routes from "../routes";
 import Button from "./auth/Button";
 import PageTitle from "./PageTitle";
 
@@ -37,6 +39,7 @@ const Wrapper = styled.div`
 `;
 
 function Upload() {
+  const history = useHistory();
   const [uploadPhoto] = useMutation(UPLOAD_PHOTO);
   const { register, handleSubmit, getValues } = useForm();
   const onSubmitValid = () => {
@@ -47,6 +50,7 @@ function Upload() {
         caption,
       },
     });
+    history.push(routes.home);
   };
   return (
     <Container>
