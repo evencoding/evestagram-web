@@ -1,7 +1,7 @@
 import { gql, useApolloClient, useMutation, useQuery } from "@apollo/client";
 import { faComment, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
 import Button from "../components/auth/Button";
 import PageTitle from "../components/PageTitle";
@@ -230,7 +230,11 @@ function Profile() {
   const getButton = (seeProfile) => {
     const { isMe, isFollowing } = seeProfile;
     if (isMe) {
-      return <ProfileBtn>Edit Profile</ProfileBtn>;
+      return (
+        <Link to={`/edit-profile/${seeProfile.username}`}>
+          <ProfileBtn>Edit Profile</ProfileBtn>
+        </Link>
+      );
     }
     if (isFollowing) {
       return <ProfileBtn onClick={unfollowUser}>Unfollow</ProfileBtn>;

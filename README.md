@@ -9,6 +9,7 @@
 - [x] Feed
 - [x] Photo Upload
 - [x] Dark Mode
-- [ ] Search
 - [ ] Edit Profile
 - [ ] Photo Delete
+- [ ] Photo Cache
+- [ ] Search
