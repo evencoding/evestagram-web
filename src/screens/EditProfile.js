@@ -1,3 +1,4 @@
+import { gql, useMutation } from "@apollo/client";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import styled from "styled-components";
@@ -54,12 +55,67 @@ const HeaderContainer = styled.div`
   margin-bottom: 25px;
 `;
 
+const EDIT_PROFILE_MUTATION = gql`
+  mutation editProfile(
+    $avatar: Upload
+    $lastName: String
+    $firstName: String
+    $bio: String
+    $password: String
+  ) {
+    editProfile(
+      avatar: $avatar
+      lastName: $lastName
+      firstName: $firstName
+      bio: $bio
+      password: $password
+    ) {
+      firstName
+      lastName
+      bio
+      avatar
+      ok
+      error
+    }
+  }
+`;
+
 function EditProfile() {
   const { username } = useParams();
   const { data } = useUser();
-  const onSubmitValid = () => {};
-  const loading = false;
-  const { register, handleSubmit, errors, formState } = useForm({
+
+  const updateProfile = (cache, result) => {
+    const {
+      data: {
+        editProfile: { firstName, lastName, bio, avatar, ok },
+      },
+    } = result;
+    if (ok) {
+      cache.modify({
+        id: `User:${username}`,
+        fields: {
+          firstName() {
+            return firstName;
+          },
+          lastName() {
+            return lastName;
+          },
+          bio() {
+            return bio;
+          },
+          avatar(prev) {
+            return avatar ? avatar : prev;
+          },
+        },
+      });
+    }
+  };
+
+  const [editProfile, { loading }] = useMutation(EDIT_PROFILE_MUTATION, {
+    update: updateProfile,
+  });
+
+  const { register, handleSubmit, errors } = useForm({
     mode: "onChange",
     defaultValues: {
       bio: data?.me?.bio,
@@ -68,6 +124,21 @@ function EditProfile() {
       isDeveloper: true,
     },
   });
+
+  const onSubmitValid = (data) => {
+    if (loading) {
+      return;
+    }
+    editProfile({
+      variables: {
+        avatar: data?.avatar[0] ? data?.avatar[0] : undefined,
+        firstName: data?.firstName.length ? data?.firstName : undefined,
+        lastName: data?.lastName.length ? data?.lastName : undefined,
+        password: data?.password.length ? data?.password : undefined,
+        bio: data?.bio.length ? data?.bio : undefined,
+      },
+    });
+  };
   return (
     <>
       {username === data?.me?.username ? (
@@ -118,9 +189,7 @@ function EditProfile() {
                   style={{ opacity: "0.7" }}
                 />
                 <Input
-                  ref={register({
-                    required: "First Name is required.",
-                  })}
+                  ref={register()}
                   name="firstName"
                   type="text"
                   placeholder="First Name"
@@ -136,9 +205,7 @@ function EditProfile() {
                 />
                 <FormError message={errors?.lastName?.message} />
                 <Input
-                  ref={register({
-                    required: "Password is required.",
-                  })}
+                  ref={register()}
                   name="password"
                   type="password"
                   placeholder="Password"
@@ -148,7 +215,6 @@ function EditProfile() {
                 <Button
                   type="submit"
                   value={loading ? "Loading..." : "Submit"}
-                  disabled={!formState.isValid || loading}
                 />
                 <FormError message={errors?.result?.message} />
               </form>
