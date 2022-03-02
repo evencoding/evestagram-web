@@ -35,6 +35,7 @@ const CommentCaption = styled.span`
 
 const DeleteBtn = styled.button`
   font-weight: 600;
+  color: ${(props) => props.theme.fontColor};
   border: none;
   background-color: inherit;
   cursor: pointer;

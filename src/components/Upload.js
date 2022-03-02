@@ -10,11 +10,22 @@ const UPLOAD_PHOTO = gql`
   mutation uploadPhoto($file: Upload!, $caption: String) {
     uploadPhoto(file: $file, caption: $caption) {
       id
-      # user
-      # file
-      # caption
-      # likes
-      # comments
+      user {
+        username
+        avatar
+      }
+      file
+      caption
+      likes
+      hashtags {
+        id
+      }
+      comments {
+        id
+      }
+      commentNumber
+      isMine
+      isLiked
     }
   }
 `;
@@ -39,16 +50,35 @@ const Wrapper = styled.div`
 `;
 
 function Upload() {
+  const createFeedPhoto = (cache, result) => {
+    const {
+      data: { uploadPhoto },
+    } = result;
+    if (uploadPhoto.id) {
+      cache.modify({
+        id: `ROOT_QUERY`,
+        fields: {
+          seeFeed(prev) {
+            return [uploadPhoto, ...prev];
+          },
+        },
+      });
+    }
+  };
   const history = useHistory();
-  const [uploadPhoto] = useMutation(UPLOAD_PHOTO);
+  const [uploadPhoto, { loading }] = useMutation(UPLOAD_PHOTO);
   const { register, handleSubmit, getValues } = useForm();
   const onSubmitValid = () => {
+    if (loading) {
+      return;
+    }
     const { file, caption } = getValues();
     uploadPhoto({
       variables: {
         file: file[0],
         caption,
       },
+      update: createFeedPhoto,
     });
     history.push(routes.home);
   };

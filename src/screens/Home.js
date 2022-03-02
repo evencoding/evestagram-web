@@ -1,9 +1,10 @@
 import styled from "styled-components";
 import { useHistory } from "react-router";
-import { gql, useQuery } from "@apollo/client";
+import { gql, InMemoryCache, useQuery } from "@apollo/client";
 import Photo from "../components/feed/Photo";
 import PageTitle from "../components/PageTitle";
 import { COMMENT_FRAGMENT, PHOTO_FRAGMENT } from "../fragments";
+import { client } from "../apollo";
 
 const Container = styled.div``;
 

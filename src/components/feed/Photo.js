@@ -11,7 +11,6 @@ import {
 } from "@fortawesome/free-regular-svg-icons";
 import propTypes from "prop-types";
 import { gql, useMutation } from "@apollo/client";
-import { FEED_QUERY } from "../../screens/Home";
 import Comments from "./Comments";
 import { Link } from "react-router-dom";
 
